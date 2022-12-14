@@ -9,6 +9,8 @@ import {
   Req,
   Res,
   Body,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { CustomersService } from 'src/customers/services/customers/customers.service';
@@ -44,7 +46,9 @@ export class CustomersController {
     return this.customersService.getCustomers();
   }
   // Easy Adding Way to add a Customer
+  // For Vaidation you must add @usePipes and validationPipe to the Post
   @Post('create')
+  @UsePipes(ValidationPipe)
   createcustomer(@Body() createCustomerDto: createCustomerDto) {
     console.log(createCustomerDto);
     this.customersService.createCustomer(createCustomerDto);
