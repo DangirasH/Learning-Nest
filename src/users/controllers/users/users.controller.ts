@@ -16,7 +16,7 @@ export class UsersController {
   constructor(
     @Inject('USER_SERVICE') private readonly userService: UsersService,
   ) {}
-
+  // Uisng Interceptors with ClassSerializerInterceptor will hold certain data from unwanted eyes
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('')
   getUsers() {

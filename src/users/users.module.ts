@@ -6,6 +6,7 @@ import { UsersService } from './services/users/users.service';
   controllers: [UsersController],
   providers: [
     {
+      // provide "USER8SERVICE is the token we give to the class UserServce"
       provide: 'USER_SERVICE',
       useClass: UsersService,
     },

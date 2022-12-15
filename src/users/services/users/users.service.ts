@@ -21,7 +21,7 @@ export class UsersService {
       password: 'samantha',
     },
   ];
-
+  // adding a Serialzed User is a way to protect vision of this specific data
   getUsers() {
     return this.users.map((user) => new SerializedUser(user));
   }
