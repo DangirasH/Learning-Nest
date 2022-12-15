@@ -1,3 +1,5 @@
+import { HttpExceptionFilter } from './../../filters/HttpException.filter';
+import { UserNotFoundException } from './../../exceptions/UserNotFound.exception';
 import { SerializedUser } from '../../types';
 import {
   ClassSerializerInterceptor,
@@ -8,6 +10,8 @@ import {
   HttpException,
   HttpStatus,
   UseInterceptors,
+  ParseIntPipe,
+  UseFilters,
 } from '@nestjs/common';
 import { UsersService } from 'src/users/services/users/users.service';
 
@@ -23,10 +27,24 @@ export class UsersController {
     return this.userService.getUsers();
   }
   @UseInterceptors(ClassSerializerInterceptor)
-  @Get('/:username')
+  @Get('§/username/:username')
   getByUsername(@Param('username') username: string) {
     const user = this.userService.getUserByUsername(username);
     if (user) return new SerializedUser(user);
     else throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  // Use Filters to be able to add exceptions to this function
+  @UseFilters(HttpExceptionFilter)
+  @Get('id/:id')
+  getById(@Param('id', ParseIntPipe) id: number) {
+    const user = this.userService.getUserById(id);
+    if (user) {
+      return new SerializedUser(user);
+    } else {
+      // Adding the exeception function to else if no user is found
+      throw new UserNotFoundException('User was not found');
+    }
   }
 }
