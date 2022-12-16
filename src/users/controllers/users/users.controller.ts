@@ -1,3 +1,4 @@
+import { CreateUserDto } from './../../dto/CreateUser.dto';
 import { HttpExceptionFilter } from './../../filters/HttpException.filter';
 import { UserNotFoundException } from './../../exceptions/UserNotFound.exception';
 import { SerializedUser } from '../../types';
@@ -12,6 +13,10 @@ import {
   UseInterceptors,
   ParseIntPipe,
   UseFilters,
+  Post,
+  Body,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from 'src/users/services/users/users.service';
 
@@ -46,5 +51,11 @@ export class UsersController {
       // Adding the exeception function to else if no user is found
       throw new UserNotFoundException('User was not found');
     }
+  }
+
+  @Post('create')
+  @UsePipes(ValidationPipe)
+  createUser(@Body() createUserDto: CreateUserDto) {
+    return this.userService.createUser(createUserDto);
   }
 }
